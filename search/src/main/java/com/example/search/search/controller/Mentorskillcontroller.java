@@ -3,6 +3,7 @@ package com.example.search.search.controller;
 
 import com.example.search.search.bean.Mentor;
 import com.example.search.search.bean.Mentorskill;
+import com.example.search.search.project.bean.Technology;
 import com.example.search.search.service.Mentorservice;
 import com.example.search.search.service.Mentorskillservice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +42,14 @@ public class Mentorskillcontroller {
 
 
     }
+
+
+    @GetMapping(value="/giveall", headers="Accept=application/json")
+    public List<Mentorskill> getAll(){
+        List<Mentorskill> task=mentorskillservice.getAllMentorskill();
+        return task;
+    }
+
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Mentorskill> getMentorById(@PathVariable("id") long id) {
@@ -90,23 +102,51 @@ public class Mentorskillcontroller {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
+    @GetMapping(value = "/username",headers="Accept=application/json")
+    public List<String> getusername(@RequestParam String skill)
+    {
+        RestTemplate restTemplate = new RestTemplate();
 
-    @GetMapping(value = "/username", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<String> getMentorusername(@RequestParam("idarr") List<Long> idarr) {
-        //System.out.println("Fetching User with id " + id);
-
-        List<String> output=new ArrayList<>();
-        for(Long obj:idarr){
-            Mentor temp=mentorservice.findById(obj);
-            if(temp!=null){
-                output.add(temp.getUsername());
-            }
-
+        final String baseUrl = "http://localhost:8995/technology/searchskill/";
+        URI uri = null;
+        try {
+            uri = new URI(baseUrl);
+        } catch (URISyntaxException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
-       return output;
+        ResponseEntity<Technology[]> result=restTemplate.getForEntity(uri+skill,Technology[].class);
+
+
+        List<String> list=new ArrayList<>();
+        List<Mentorskill> mentorskillList=mentorskillservice.getAllMentorskill();
+        if(result.getBody()!=null)
+        {
+           for(Technology tech:result.getBody()){
+
+               long skillid=tech.getId();
+
+               for(Mentorskill mentorskill:mentorskillList)
+               {
+                   long a=mentorskill.getSid();
+                   if(a==skillid)
+                   {
+                       list.add(mentorservice.findById(mentorskill.getMid()).getUsername());
+                   }
+               }
+
+           }
+        }
+        if(list.size()==0)
+        {
+            list.add("empty list");
+        }
+        return list;
 
     }
+
+
 
 
 

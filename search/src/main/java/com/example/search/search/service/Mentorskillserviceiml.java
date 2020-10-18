@@ -21,6 +21,11 @@ public class Mentorskillserviceiml implements Mentorskillservice {
         return mentorskillrepo.findById(id).get();
     }
 
+    @Override
+    public List<Mentorskill> getAllMentorskill() {
+        return (List<Mentorskill>)mentorskillrepo.findAll();
+    }
+
     public List<Mentorskill> findBySkillId(long sid){
         return (List<Mentorskill>)mentorskillrepo.findBySkillId(sid);
     }

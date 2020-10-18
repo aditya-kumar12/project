@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface Mentorskillservice {
     public Mentorskill findById(long id);
+    public List<Mentorskill> getAllMentorskill();
     public List<Mentorskill> getMentorskills(Integer pageNo, Integer pageSize, String sortBy);
     public void createMentorskills(Mentorskill training);
     public void deleteMentorskills(long id);
