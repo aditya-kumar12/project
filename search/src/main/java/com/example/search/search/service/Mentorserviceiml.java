@@ -18,7 +18,7 @@ public class Mentorserviceiml implements Mentorservice {
     @Autowired
     Mentorrepository mentorrepository;
 
-    public Mentor findById(long id) {
+    public Mentor findId(long id) {
         return mentorrepository.findById(id).get();
     }
 

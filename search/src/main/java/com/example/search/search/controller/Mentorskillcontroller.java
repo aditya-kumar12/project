@@ -3,7 +3,7 @@ package com.example.search.search.controller;
 
 import com.example.search.search.bean.Mentor;
 import com.example.search.search.bean.Mentorskill;
-import com.example.search.search.project.bean.Technology;
+import com.example.search.search.Technology;
 import com.example.search.search.service.Mentorservice;
 import com.example.search.search.service.Mentorskillservice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,20 +123,20 @@ public class Mentorskillcontroller {
         List<Mentorskill> mentorskillList=mentorskillservice.getAllMentorskill();
         if(result.getBody()!=null)
         {
-           for(Technology tech:result.getBody()){
+            for(Technology tech:result.getBody()){
 
-               long skillid=tech.getId();
+                long skillid=tech.getId();
 
-               for(Mentorskill mentorskill:mentorskillList)
-               {
-                   long a=mentorskill.getSid();
-                   if(a==skillid)
-                   {
-                       list.add(mentorservice.findById(mentorskill.getMid()).getUsername());
-                   }
-               }
+                for(Mentorskill mentorskill:mentorskillList)
+                {
+                    long a=mentorskill.getSid();
+                    if(a==skillid)
+                    {
+                        list.add(mentorservice.findId(mentorskill.getMid()).getUsername());
+                    }
+                }
 
-           }
+            }
         }
         if(list.size()==0)
         {

@@ -1,16 +1,17 @@
-package com.example.search.search.project.bean;
+package com.example.search.search;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name="Technology")
 public class Technology {
     @Id
     //@GeneratedValue(strategy= GenerationType.AUTO)
-    private long id;
+     long id;
 
     @Column(name="name")
     private String name;

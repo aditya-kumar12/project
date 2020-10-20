@@ -35,7 +35,7 @@ public class Mentorcontroller {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Mentor> getMentorById(@PathVariable("id") long id) {
         System.out.println("Fetching User with id " + id);
-        Mentor mentor = mentorservice.findById(id);
+        Mentor mentor = mentorservice.findId(id);
         if (mentor == null) {
             return new ResponseEntity<Mentor>(HttpStatus.NOT_FOUND);
         }
@@ -54,7 +54,7 @@ public class Mentorcontroller {
 
     @DeleteMapping(value="/{id}", headers ="Accept=application/json")
     public ResponseEntity<Mentor> deleteTechnology(@PathVariable("id") long id){
-        Mentor mentor = mentorservice.findById(id);
+        Mentor mentor = mentorservice.findId(id);
         if (mentor == null) {
             return new ResponseEntity<Mentor>(HttpStatus.NOT_FOUND);
         }
@@ -67,7 +67,7 @@ public class Mentorcontroller {
     public ResponseEntity<String> updateUser(@RequestBody Mentor current)
     {
         //System.out.println("sd");
-        Mentor mentor = mentorservice.findById(current.getId());
+        Mentor mentor = mentorservice.findId(current.getId());
         if (mentor==null) {
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
         }
