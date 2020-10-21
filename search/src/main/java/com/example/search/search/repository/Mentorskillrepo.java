@@ -12,6 +12,6 @@ public interface Mentorskillrepo extends JpaRepository<Mentorskill, Long> {
     @Query(value = "SELECT * FROM mentorskill a WHERE a.skillid=?1 ", nativeQuery = true)
     List<Mentorskill> findBySkillId(Long id);
 
-//     List<Mentorskill>findBySkillId(Long id);
+
 
 }

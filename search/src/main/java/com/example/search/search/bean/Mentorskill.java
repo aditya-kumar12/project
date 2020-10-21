@@ -3,10 +3,11 @@ package com.example.search.search.bean;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table(name="Mentorskill")
-public class Mentorskill {
+public class Mentorskill implements Serializable {
 
     @Id
     //@GeneratedValue(strategy= GenerationType.AUTO).identiy

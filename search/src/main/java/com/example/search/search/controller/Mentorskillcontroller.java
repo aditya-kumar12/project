@@ -61,13 +61,13 @@ public class Mentorskillcontroller {
         return new ResponseEntity<Mentorskill>(mentorskill, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/skill/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Mentorskill> getMentorSkillById(@PathVariable("id") long sid) {
-        System.out.println("Fetching User with id " + sid);
-        List<Mentorskill> mentorskill= mentorskillservice.findBySkillId(sid);
-
-        return mentorskill;
-    }
+//    @GetMapping(value = "/skill/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public List<Mentorskill> getMentorSkillById(@PathVariable("id") long sid) {
+//        System.out.println("Fetching User with id " + sid);
+//        List<Mentorskill> mentorskill= mentorskillservice.findBySkillId(sid);
+//
+//        return mentorskill;
+//    }
 
 
     @PostMapping(value="/create",headers="Accept=application/json")
@@ -102,12 +102,12 @@ public class Mentorskillcontroller {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/username",headers="Accept=application/json")
-    public List<String> getusername(@RequestParam String skill)
+    @GetMapping(value = "/username/{skill}",headers="Accept=application/json")
+    public List<String> getusername(@PathVariable String skill)
     {
         RestTemplate restTemplate = new RestTemplate();
 
-        final String baseUrl = "http://localhost:8995/technology/searchskill/";
+        final String baseUrl = "http://localhost:8990/technology/searchskill/";
         URI uri = null;
         try {
             uri = new URI(baseUrl);
@@ -145,6 +145,8 @@ public class Mentorskillcontroller {
         return list;
 
     }
+
+
 
 
 
