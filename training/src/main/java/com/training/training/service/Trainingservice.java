@@ -10,5 +10,9 @@ public interface Trainingservice {
     public void createTraining(Training training);
     public void deleteTrainingById(long id);
     public void update(Training current, long id);
+    //public void approved();
+    public Training getcompletedtraining(long uid,long mid);
+
+
 
 }

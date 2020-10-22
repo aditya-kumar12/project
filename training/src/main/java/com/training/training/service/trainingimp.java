@@ -56,4 +56,13 @@ public class trainingimp implements Trainingservice{
     public void update(Training current, long id) {
         trainingrepository.save(current);
     }
+
+
+    public Training  getcompletedtraining(long uid, long mid) {
+        return (Training) trainingrepository.findByUseridAndMentorid(uid,mid);
+
+
+
+
+    }
 }

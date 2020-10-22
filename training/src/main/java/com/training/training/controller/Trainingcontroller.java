@@ -19,6 +19,9 @@ public class Trainingcontroller {
     @Autowired
     Trainingservice trainingservice;
 
+//    @Autowired
+//    Training training;
+
 
     @GetMapping(value="/get", headers="Accept=application/json")
     public ResponseEntity<List<Training>> getTechnology(
@@ -77,6 +80,65 @@ public class Trainingcontroller {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
+
+    @PostMapping(value="/propose/{learn}/{mentor}/{skill}",headers="Accept=application/json")
+    public String propose(@RequestBody Training training,@PathVariable Long learn,@PathVariable Long mentor,@PathVariable Long skill){
+        System.out.println("Creating User "+training.getId());
+        training.setMentorid(mentor);
+        training.setUserid(learn);
+        training.setTechid(skill);
+        training.setStatus("proposed");
+
+        trainingservice.createTraining(training);
+        return "training proposed";
+
+    }
+
+    @PutMapping(value="/approve/{id}", headers="Accept=application/json")
+    public ResponseEntity<String> approve(@PathVariable long id)
+    {
+        //System.out.println("sd");
+        Training training = trainingservice.findById(id);
+        if (training==null) {
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+        }
+        training.setStatus("approved");
+        trainingservice.update(training, training.getId());
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @PutMapping(value="/finalize/{id}", headers="Accept=application/json")
+    public ResponseEntity<String> finalize(@PathVariable long id)
+    {
+        //System.out.println("sd");
+        Training training = trainingservice.findById(id);
+        if (training==null) {
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+        }
+        training.setStatus("training started");
+        training.setProgress("0%");
+        training.setAmountreceived("full");
+        training.setStartdate("today");
+        training.setEnddate("8 weeks");
+        training.setStarttime("10am");
+        training.setEndtime("2pm");
+        trainingservice.update(training, training.getId());
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "complete/{uid}/{mid}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Training> completed(@PathVariable("uid") long uid,@PathVariable("uid") long mid) {
+        System.out.println("Fetching User with id " + uid);
+        Training training = trainingservice.getcompletedtraining(uid,mid);
+        if (training == null) {
+            return new ResponseEntity<Training>(HttpStatus.NOT_FOUND);
+        }
+        if(training.getProgress()=="completed"){
+            return new ResponseEntity<Training>(training, HttpStatus.OK);
+        }
+        System.out.println("Training not completed till now;");
+        return new ResponseEntity<Training>(HttpStatus.NOT_FOUND);
+    }
 
 
 
