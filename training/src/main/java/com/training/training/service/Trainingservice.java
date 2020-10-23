@@ -11,7 +11,10 @@ public interface Trainingservice {
     public void deleteTrainingById(long id);
     public void update(Training current, long id);
     //public void approved();
-    public Training getcompletedtraining(long uid,long mid);
+    public List<Training> getcompletedtraining(long uid,long mid);
+
+    public List<Training> getmentor(long id);
+    public List<Training> getuser(long id);
 
 
 

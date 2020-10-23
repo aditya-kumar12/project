@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -126,21 +127,69 @@ public class Trainingcontroller {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "complete/{uid}/{mid}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Training> completed(@PathVariable("uid") long uid,@PathVariable("uid") long mid) {
-        System.out.println("Fetching User with id " + uid);
-        Training training = trainingservice.getcompletedtraining(uid,mid);
+    @GetMapping(value = "complete/{uid}/{mid}", headers="Accept=application/json")
+    public List<Training> completed(@PathVariable("uid") long uid,@PathVariable("mid") long mid) {
+        System.out.println("Fetching User with id " + uid+" "+mid);
+        List<Training> training = trainingservice.getcompletedtraining(uid,mid);
+        System.out.println(training);
+        List<Training> op=new ArrayList<Training>();
         if (training == null) {
-            return new ResponseEntity<Training>(HttpStatus.NOT_FOUND);
+            System.out.println("either not comleted or inputs are wrong");
+           return op;
         }
-        if(training.getProgress()=="completed"){
-            return new ResponseEntity<Training>(training, HttpStatus.OK);
+
+        for(Training obj:training)
+        {
+             if(obj.getStatus().equals("completed")){
+                 op.add(obj);
+           }
         }
-        System.out.println("Training not completed till now;");
-        return new ResponseEntity<Training>(HttpStatus.NOT_FOUND);
+
+        return training ;
+    }
+
+    @GetMapping(value = "mentorprogress/{id}", headers="Accept=application/json")
+    public List<Training> getmentorprogress(@PathVariable("id") long id) {
+        System.out.println("Fetching User with id " + id);
+        List<Training> training = trainingservice.getmentor(id);
+        List<Training> op = new ArrayList<Training>();
+        if (training == null) {
+            return op;
+        }
+
+
+        for(Training obj:training)
+        {
+            if(obj.getStatus()!="completed"){
+                op.add(obj);
+            }
+        }
+
+        return op;
+
     }
 
 
+    @GetMapping(value = "userprogress/{id}", headers="Accept=application/json")
+    public List<Training> getuserprogress(@PathVariable("id") long id) {
+        System.out.println("Fetching User with id " + id);
+        List<Training> training = trainingservice.getuser(id);
+        List<Training> op = new ArrayList<Training>();
+        if (training == null) {
+            return op;
+        }
+
+
+        for(Training obj:training)
+        {
+            if(obj.getStatus()!="completed"){
+                op.add(obj);
+            }
+        }
+
+        return op;
+
+    }
 
 
 

@@ -58,11 +58,18 @@ public class trainingimp implements Trainingservice{
     }
 
 
-    public Training  getcompletedtraining(long uid, long mid) {
-        return (Training) trainingrepository.findByUseridAndMentorid(uid,mid);
-
-
-
+    public List<Training>  getcompletedtraining(long uid, long mid) {
+        return (List<Training>) trainingrepository.uidmid(uid,mid);
 
     }
+
+
+    public List<Training> getmentor(long id){
+        return (List<Training>)trainingrepository.findByMentorid(id);
+    }
+
+    public List<Training> getuser(long id){
+        return (List<Training>)trainingrepository.findByUserid(id);
+    }
+
 }
