@@ -1,0 +1,14 @@
+
+server:
+  port: 8989
+
+zuul:
+  routes:
+     skill:
+        url: http://localhost:8990
+     training:
+        url: http://localhost:8991
+     search:
+        url: http://localhost:8995
+     user:
+        url: http://localhost:8994
