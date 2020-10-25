@@ -9,20 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-
-
-
-
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/technology")
+//@RequestMapping("/technology")
 public class Technologycontroller {
 
     @Autowired
@@ -61,13 +54,27 @@ public class Technologycontroller {
 //        return new ResponseEntity<Technology>(technology, HttpStatus.OK);
 //    }
 
+//    @PostMapping(value="/create",headers="Accept=application/json")
+//    public ResponseEntity<Void> createUser(@RequestBody Technology technology, UriComponentsBuilder ucBuilder){
+//        System.out.println("Creating User "+technology.getName());
+//        technologyservice.createTechnology(technology);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(technology.getId()).toUri());
+//        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+//    }
+
     @PostMapping(value="/create",headers="Accept=application/json")
-    public ResponseEntity<Void> createUser(@RequestBody Technology technology, UriComponentsBuilder ucBuilder){
+    public ResponseEntity<Object> createUser(@RequestBody Technology technology){
         System.out.println("Creating User "+technology.getName());
         technologyservice.createTechnology(technology);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(technology.getId()).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+//        headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(technology.getId()).toUri());
+//        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        URI path= ServletUriComponentsBuilder.fromCurrentRequest().path("/user/{id}")
+                .buildAndExpand(technology.getId()).toUri();
+
+       return ResponseEntity.created(path).build();
+
     }
 
     @DeleteMapping(value="/{id}", headers ="Accept=application/json")
