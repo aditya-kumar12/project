@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/training")
+//@RequestMapping("/training")
 public class Trainingcontroller {
 
     @Autowired
