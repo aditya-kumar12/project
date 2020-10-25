@@ -14,7 +14,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+//@RequestMapping("/user")
 public class Usercontroller
 {
 
@@ -105,6 +105,8 @@ public class Usercontroller
         userservice.update(current, current.getId());
         return new ResponseEntity<String>(HttpStatus.OK);
     }
+
+
 
 
 

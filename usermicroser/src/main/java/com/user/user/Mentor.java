@@ -30,6 +30,7 @@ public class Mentor {
         this.regcode="QWM5"+id;
         this.experience="2yr";
         this.regdate="27/7/2018";
+        this.lurl=" http://linked.com ";
 
 
     }
