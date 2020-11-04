@@ -3,6 +3,7 @@ package com.project.project.controller;
 
 import com.project.project.bean.Technology;
 import com.project.project.service.Technologyservice;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 //@RequestMapping("/technology")
 public class Technologycontroller {
+
+    private static final org.slf4j.Logger logger= LoggerFactory.getLogger(Technologycontroller.class);
+
 
     @Autowired
     Technologyservice technologyservice;
@@ -29,6 +34,7 @@ public class Technologycontroller {
     {
 
         List<Technology> tasks=technologyservice.getTechnology(pageNo, pageSize, sortBy);
+        logger.info("Get items of page no "+pageNo);
         return new ResponseEntity<List<Technology>>(tasks, new HttpHeaders(), HttpStatus.OK);
 
 
@@ -36,7 +42,7 @@ public class Technologycontroller {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Technology> getTechnologyById(@PathVariable("id") long id) {
-        System.out.println("Fetching User with id " + id);
+        logger.info("Fetching Technology with id " + id);
         Technology technology = technologyservice.findById(id);
         if (technology == null) {
             return new ResponseEntity<Technology>(HttpStatus.NOT_FOUND);
@@ -44,32 +50,13 @@ public class Technologycontroller {
         return new ResponseEntity<Technology>(technology, HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Technology> getTechnologyById(@PathVariable("id") long id) {
-//        System.out.println("Fetching User with id " + id);
-//        Technology technology = technologyservice.findById(id);
-//        if (technology == null) {
-//            return new ResponseEntity<Technology>(HttpStatus.NOT_FOUND);
-//        }
-//        return new ResponseEntity<Technology>(technology, HttpStatus.OK);
-//    }
-
-//    @PostMapping(value="/create",headers="Accept=application/json")
-//    public ResponseEntity<Void> createUser(@RequestBody Technology technology, UriComponentsBuilder ucBuilder){
-//        System.out.println("Creating User "+technology.getName());
-//        technologyservice.createTechnology(technology);
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(technology.getId()).toUri());
-//        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-//    }
 
     @PostMapping(value="/create",headers="Accept=application/json")
     public ResponseEntity<Object> createUser(@RequestBody Technology technology){
-        System.out.println("Creating User "+technology.getName());
+        logger.info("Creating Technology of "+technology.getName());
         technologyservice.createTechnology(technology);
         HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(technology.getId()).toUri());
-//        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+
         URI path= ServletUriComponentsBuilder.fromCurrentRequest().path("/user/{id}")
                 .buildAndExpand(technology.getId()).toUri();
 
@@ -77,8 +64,9 @@ public class Technologycontroller {
 
     }
 
-    @DeleteMapping(value="/{id}", headers ="Accept=application/json")
+    @DeleteMapping(value="delete/{id}", headers ="Accept=application/json")
     public ResponseEntity<Technology> deleteTechnology(@PathVariable("id") long id){
+        logger.info("Delete skill with id: "+id);
         Technology technology = technologyservice.findById(id);
         if (technology == null) {
             return new ResponseEntity<Technology>(HttpStatus.NOT_FOUND);
@@ -91,7 +79,7 @@ public class Technologycontroller {
     @PutMapping(value="/update", headers="Accept=application/json")
     public ResponseEntity<String> updateUser(@RequestBody Technology current)
     {
-        //System.out.println("sd");
+        logger.info("Updated skill with id: "+current.getId());
         Technology technology = technologyservice.findById(current.getId());
         if (technology==null) {
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
@@ -103,14 +91,20 @@ public class Technologycontroller {
 
     @GetMapping(value="/getskill/{id}", headers="Accept=application/json")
     public String getskill(@PathVariable long id) {
-        String tasks=technologyservice.findbyskill(id);
-        return tasks;
+        logger.info("Get skill name with this id: "+id);
+        String task=technologyservice.findbyskill(id);
+        if(task==null){
+            task="no skill of this id is present";
+        }
+        return task;
 
     }
 
     @GetMapping(value="/searchskill/{skill}", headers="Accept=application/json")
     public List<Technology> searchskill(@PathVariable String skill) {
+        logger.info("Get list of this: "+skill);
         List<Technology> tasks=technologyservice.searchskill(skill);
+
         return tasks;
 
     }

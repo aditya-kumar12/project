@@ -1,6 +1,10 @@
 package com.project.project.bean;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="Technology")
@@ -9,6 +13,7 @@ public class Technology {
     //@GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
+    @NotNull(message = "name is required")
     @Column(name="name")
     private String name;
 
@@ -18,6 +23,7 @@ public class Technology {
     @Column(name="prereq")
     private String prereq;
 
+    @NotNull(message = "toc is required")
     @Column(name="toc")
     private String toc;
 
