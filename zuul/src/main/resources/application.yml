@@ -1,8 +1,22 @@
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8996/eureka/
+#register url to server
+
+instance:
+  hostname: localhost
+
+
+
 
 server:
   port: 8989
 
 zuul:
+  sensitiveHeaders: Cookie,Set-Cookie
   routes:
      skill:
         url: http://localhost:8990
@@ -12,3 +26,5 @@ zuul:
         url: http://localhost:8995
      user:
         url: http://localhost:8994
+
+
