@@ -6,6 +6,7 @@ import com.example.search.search.bean.Mentorskill;
 import com.example.search.search.Technology;
 import com.example.search.search.service.Mentorservice;
 import com.example.search.search.service.Mentorskillservice;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,9 +21,13 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/mentorskill")
 public class Mentorskillcontroller {
+    private static final org.slf4j.Logger logger= LoggerFactory.getLogger(Mentorskillcontroller.class);
+
+
     @Autowired
     Mentorskillservice mentorskillservice;
 
@@ -36,7 +41,7 @@ public class Mentorskillcontroller {
             @RequestParam(defaultValue = "3") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy)
     {
-
+        logger.info("Get items of mentorskill of page no "+pageNo);
         List<Mentorskill> tasks=mentorskillservice.getMentorskills(pageNo, pageSize, sortBy);
         return new ResponseEntity<List<Mentorskill>>(tasks, new HttpHeaders(), HttpStatus.OK);
 
@@ -47,13 +52,14 @@ public class Mentorskillcontroller {
     @GetMapping(value="/giveall", headers="Accept=application/json")
     public List<Mentorskill> getAll(){
         List<Mentorskill> task=mentorskillservice.getAllMentorskill();
+        logger.info("get all mentorskill");
         return task;
     }
 
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Mentorskill> getMentorById(@PathVariable("id") long id) {
-        System.out.println("Fetching User with id " + id);
+        logger.info("Fetching mentorskill with id " + id);
         Mentorskill mentorskill= mentorskillservice.findById(id);
         if (mentorskill == null) {
             return new ResponseEntity<Mentorskill>(HttpStatus.NOT_FOUND);
@@ -72,7 +78,7 @@ public class Mentorskillcontroller {
 
     @PostMapping(value="/create",headers="Accept=application/json")
     public ResponseEntity<Void> createMentor(@RequestBody Mentorskill mentorskill, UriComponentsBuilder ucBuilder){
-        System.out.println("Creating User "+mentorskill.getId());
+        logger.info("Creating mentorskill "+mentorskill.getId());
         mentorskillservice.createMentorskills(mentorskill);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(mentorskill.getId()).toUri());
@@ -82,6 +88,7 @@ public class Mentorskillcontroller {
     @DeleteMapping(value="/{id}", headers ="Accept=application/json")
     public ResponseEntity<Mentorskill> deleteTechnology(@PathVariable("id") long id){
         Mentorskill mentorskill = mentorskillservice.findById(id);
+        logger.info("Delete mentorskill with id: "+id);
         if (mentorskill == null) {
             return new ResponseEntity<Mentorskill>(HttpStatus.NOT_FOUND);
         }
@@ -93,7 +100,7 @@ public class Mentorskillcontroller {
     @PutMapping(value="/update", headers="Accept=application/json")
     public ResponseEntity<String> updateUser(@RequestBody Mentorskill current)
     {
-        //System.out.println("sd");
+        logger.info("Update mentorskill of id: "+current.getId());
         Mentorskill mentorskill = mentorskillservice.findById(current.getId());
         if (mentorskill==null) {
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
@@ -106,6 +113,7 @@ public class Mentorskillcontroller {
     public List<String> getusername(@PathVariable String skill)
     {
         RestTemplate restTemplate = new RestTemplate();
+        logger.info("get the username of the required skill");
 
         final String baseUrl = "http://localhost:8990/technology/searchskill/";
         URI uri = null;

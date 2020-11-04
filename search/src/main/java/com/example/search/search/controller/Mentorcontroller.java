@@ -2,6 +2,7 @@ package com.example.search.search.controller;
 
 import com.example.search.search.bean.Mentor;
 import com.example.search.search.service.Mentorservice;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,9 +13,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/mentor")
 public class Mentorcontroller {
+
+    private static final org.slf4j.Logger logger= LoggerFactory.getLogger(Mentorcontroller.class);
 
     @Autowired
     Mentorservice mentorservice;
@@ -25,7 +29,7 @@ public class Mentorcontroller {
             @RequestParam(defaultValue = "3") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy)
     {
-
+        logger.info("Get items of mentor of page no "+pageNo);
         List<Mentor> tasks=mentorservice.getMentor(pageNo, pageSize, sortBy);
         return new ResponseEntity<List<Mentor>>(tasks, new HttpHeaders(), HttpStatus.OK);
 
@@ -34,7 +38,7 @@ public class Mentorcontroller {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Mentor> getMentorById(@PathVariable("id") long id) {
-        System.out.println("Fetching User with id " + id);
+        logger.info("Fetching mentor with id " + id);
         Mentor mentor = mentorservice.findId(id);
         if (mentor == null) {
             return new ResponseEntity<Mentor>(HttpStatus.NOT_FOUND);
@@ -45,7 +49,7 @@ public class Mentorcontroller {
 
     @PostMapping(value="/create",headers="Accept=application/json")
     public ResponseEntity<Void> createMentor(@RequestBody Mentor mentor, UriComponentsBuilder ucBuilder){
-        System.out.println("Creating User "+mentor.getId());
+        logger.info("Creating mentor "+mentor.getId());
         mentorservice.createMentor(mentor);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(mentor.getId()).toUri());
@@ -55,6 +59,7 @@ public class Mentorcontroller {
     @DeleteMapping(value="/{id}", headers ="Accept=application/json")
     public ResponseEntity<Mentor> deleteTechnology(@PathVariable("id") long id){
         Mentor mentor = mentorservice.findId(id);
+        logger.info("Delete mentor with id: "+id);
         if (mentor == null) {
             return new ResponseEntity<Mentor>(HttpStatus.NOT_FOUND);
         }
@@ -66,7 +71,7 @@ public class Mentorcontroller {
     @PutMapping(value="/update", headers="Accept=application/json")
     public ResponseEntity<String> updateUser(@RequestBody Mentor current)
     {
-        //System.out.println("sd");
+        logger.info("Update mentor of id: "+current.getId());
         Mentor mentor = mentorservice.findId(current.getId());
         if (mentor==null) {
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
