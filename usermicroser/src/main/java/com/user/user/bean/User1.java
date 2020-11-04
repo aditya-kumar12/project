@@ -1,9 +1,8 @@
 package com.user.user.bean;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.springframework.lang.NonNull;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name="User1")
